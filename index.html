@@ -692,6 +692,7 @@
               <span class="home-nav-title">myPechanga</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
+              <button class="btn-ghost" onclick="openPlayPRC()" title="Open Casino PRC" style="padding: 6px 12px; font-size: 11px; background:rgba(201,164,62,0.18);">🎰 PRC</button>
               <div class="home-nav-notif" onclick="showToast('3 new offers available!')">
                 🔔
                 <div class="notif-badge"></div>
@@ -1026,6 +1027,24 @@
       try { await descopeSDK.logout(); } catch(_) {}
       transitionTo('vHome', 'vLogin');
       setTimeout(() => { location.reload(); }, 300);
+    }
+
+    // ─── Open Play PRC with token ──────────────────────────────────
+    async function openPlayPRC() {
+      try {
+        const sessionJwt = localStorage.getItem(JWT_KEY);
+        console.log('openPlayPRC - JWT_KEY:', JWT_KEY, 'JWT found:', !!sessionJwt);
+        if (!sessionJwt) {
+          showToast('No active session. Please sign in first.');
+          return;
+        }
+        const playPrcUrl = `https://kraghavan-aark.github.io/playprc/?token=${encodeURIComponent(sessionJwt)}&provider=descope`;
+        console.log('Opening playPRC with URL:', playPrcUrl.substring(0, 100) + '...');
+        window.open(playPrcUrl, '_blank');
+      } catch (err) {
+        console.error('Error opening Play PRC:', err);
+        showToast('Error opening Play PRC. Check console.');
+      }
     }
 
     // ─── Check existing session on load ───────────────────────────
