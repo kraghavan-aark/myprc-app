@@ -913,6 +913,7 @@
 
     // ─── Session store (iframe-based auth — tokens live in Descope's origin) ──
     const SESSION_KEY = 'pechanga_session';
+    const JWT_KEY = 'pechanga_jwt';
 
     function saveSession(email, name, sessionJwt) {
       // Decode exp from JWT without a library (base64 middle segment)
@@ -922,6 +923,8 @@
         if (payload.exp) exp = payload.exp;
       } catch(_) {}
       localStorage.setItem(SESSION_KEY, JSON.stringify({ email, name, exp }));
+      // Also store JWT for token sharing
+      if (sessionJwt) localStorage.setItem(JWT_KEY, sessionJwt);
     }
 
     function loadSession() {
@@ -934,6 +937,7 @@
 
     function clearSession() {
       localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(JWT_KEY);
     }
 
     // ─── Descope web component success event ─────────────────────
