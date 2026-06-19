@@ -952,7 +952,13 @@
         const email = user.email || user.loginIds?.[0] || '';
         const name  = user.name  || user.givenName     || email.split('@')[0];
 
-        if (jwt) saveSession(email, name, jwt);
+        console.log('Descope success event:', { jwt: jwt ? 'present' : 'missing', email, name });
+        if (jwt) {
+          console.log('Saving session with JWT');
+          saveSession(email, name, jwt);
+        } else {
+          console.log('No JWT in success event - cannot share token with playPRC');
+        }
         populateHome(email, name);
         transitionTo('vLogin', 'vHome');
       });
